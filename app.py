@@ -13,7 +13,7 @@ import werkzeug
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-UPLOAD_FOLDER = '/root/hakkason/uploadyou/Spare/static/img/'
+UPLOAD_FOLDER = '/Users/hiroki/Desktop/hackathon/hackathon-sample-replaced/Spare/static/img'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -24,6 +24,55 @@ app.permanent_session_lifetime = timedelta(days=30)
 
 #app.config['MAX_CONTENT_LENGTH'] = 70 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+'''
+@app.route('/todo') 
+def todo():
+    return render_template('/todo.html')
+'''
+
+
+
+
+@app.route('/todo')
+def todo():
+    uid = session.get("uid")
+    if uid is None:
+        return redirect('/login')
+
+    tkname = request.form.get("tkna")
+    expr = request.form.get("kizi")
+    prio = request.form.get("level")
+
+    print("toooooooo")
+    print(tkname)
+    return render_template('todo.html')
+
+@app.route('/todo', methods=['POST'])
+def todolist():
+    uid = session.get("uid")
+    if uid is None:
+        return redirect('/login')
+
+    tkname = request.form.get("tkna")
+    expr = request.form.get("kizi")
+    prio = request.form.get("level")
+    print(prio)
+    print(tkname)
+    print(expr)
+
+    dbConnect.createTodolist(uid, prio, tkname, expr)
+
+    todolist = dbConnect.getTodoAll(uid)
+    print(todolist)
+
+
+    return render_template('todo.html',todolist=todolist)
+
+
+
+
 
 @app.route('/signup')
 def signup():
@@ -136,8 +185,6 @@ def add_channel():
         return render_template('error/error.html', error_message=error)
 
 
-
-
 @app.route('/update_channel', methods=['POST'])
 def update_channel():
     uid = session.get("uid")
@@ -184,7 +231,7 @@ def detail(cid):
     print(uid)
 #    print(uname)  
 
-    dbConnect.createKidokulist(uid)
+    # dbConnect.createKidokulist(uid)
 
 #    kidoku = dbConnect.getKidokulist()
 #    print(kidoku)

@@ -402,5 +402,45 @@ class dbConnect:
 
 
 
+    def createTodolist(uid, prio, tkname, expr):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "INSERT INTO todolist(uid, proity, tkname, expr) VALUES(%s, %s, %s, %s)"
+            cur.execute(sql, (uid, prio, tkname, expr))
+            conn.commit()
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+        finally:
+            cur.close()
 
+
+    def getTodoAll(uid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM todolist WHERE uid=%s;"
+            cur.execute(sql, (uid))
+            todolist = cur.fetchall()
+            return todolist
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+        finally:
+            cur.close()
+
+
+    def deleteTodolist(message_id):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "DELETE FROM todolist WHERE id=%s;"
+            cur.execute(sql, (message_id))
+            conn.commit()
+        except Exception as e:
+            print(e + 'が発生しています')
+            return None
+        finally:
+            cur.close()
 
