@@ -276,20 +276,22 @@ def add_teikei():
         return redirect('/login')
 
 #    message_teikei = request.form.get('message')
+
     cid_teikei = request.form.get('cid')
     print(cid_teikei)
 
-#    teikei = request.form.get('register')
+    teikei = request.form.get('register')
+    print(teikei)
 
-#    if teikei:
-#        dbConnect.createTeikeibun(uid, cid, teikei)
+    if teikei:
+        dbConnect.createTeikeibun(uid, teikei)
 
-#    channel = dbConnect.getChannelById(channel_id)
+    channel = dbConnect.getChannelById(cid_teikei)
 #    messages = dbConnect.getMessageAll(channel_id)
 
-#    teikei = dbConnect.getTeikeibun(uid)
+    teikei = dbConnect.getTeikeibun(uid)
 
-    return render_template('detail.html')#, channel=channel), teikei=teikei) uid=uid,messages=messages)
+    return render_template('detail.html', channel=channel, uid=uid, teikei=teikei)# =uid,messages=messages)
 
 
 
@@ -309,6 +311,7 @@ def delete_message():
     messages = dbConnect.getMessageAll(cid)
 
     return render_template('detail.html', messages=messages, channel=channel, uid=uid)
+
 
 
 

@@ -311,12 +311,12 @@ class dbConnect:
 
 
 
-    def createTeikeibun(uid, cid, message):
+    def createTeikeibun(uid, message):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "INSERT INTO teikeibun(uid, cid, message) VALUES(%s, %s, %s)"
-            cur.execute(sql, (uid, cid, message))
+            sql = "INSERT INTO teikeibun(uid, message) VALUES(%s, %s)"
+            cur.execute(sql, (uid, message))
             conn.commit()
         except Exception as e:
             print(e + 'が発生しています')
@@ -331,7 +331,7 @@ class dbConnect:
             cur = conn.cursor()
             sql = "SELECT message FROM teikeibun WHERE uid=%s;"
             cur.execute(sql, (uid))
-            teikeibun = cur.fetchone()
+            teikeibun = cur.fetchall()
             return teikeibun
         except Exception as e:
             print(e + 'が発生しています')
