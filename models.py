@@ -188,12 +188,12 @@ class dbConnect:
     
 
 #以下追加機能
-    def getSitagakiAll(cid):
+    def getSitagakiAll(uid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "SELECT id,u.uid, user_name, message, created_at FROM sitagaki AS m INNER JOIN users AS u ON m.uid = u.uid WHERE cid = %s;"
-            cur.execute(sql, (cid))
+            sql = "SELECT message FROM sitagaki WHERE uid = %s;"
+            cur.execute(sql, (uid))
             sitagaki = cur.fetchall()
             return sitagaki
         except Exception as e:
@@ -471,12 +471,3 @@ class dbConnect:
         cur.execute(sql, (password, uid))
         conn.commit()
         cur.close()
-
-
-
-
-
-
-
-
-

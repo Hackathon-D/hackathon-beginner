@@ -224,6 +224,9 @@ def detail(cid):
     uid = session.get("uid")
     if uid is None:
         return redirect('/login')
+
+    sitagaki = dbConnect.getSitagakiAll(uid)    
+
     cid = cid
     channel = dbConnect.getChannelById(cid)
     messages = dbConnect.getMessageAll(cid)
@@ -236,10 +239,9 @@ def detail(cid):
 #    kidoku = dbConnect.getKidokulist()
 #    print(kidoku)
 
-    return render_template('detail.html', messages=messages, channel=channel, uid=uid)#, uname=uname)
+    return render_template('detail.html', messages=messages, channel=channel, uid=uid, sitagaki=sitagaki)
 
 
-#大改造
 @app.route('/message', methods=['POST'])
 def add_message():
     uid = session.get("uid")
@@ -266,6 +268,37 @@ def add_message():
 
 
     return render_template('detail.html', messages=messages, channel=channel, uid=uid, tim=tim, uname=uname)
+
+
+
+@app.route('/sitagaki', methods=['POST'])
+def add_sitagaki():
+    uid = session.get("uid")
+    if uid is None:
+        return redirect('/login')
+
+    message = request.form.get('message')
+    channel_id = request.form.get('channel_id')
+    #user_id = request.form.get('message_uid')
+
+    if message:
+        dbConnect.createSitagaki(uid, channel_id, message)
+
+    channel = dbConnect.getChannelById(channel_id)
+    messages = dbConnect.getMessageAll(channel_id)
+
+    tim = dbConnect.getTimeMessage(channel_id)
+
+    uname = dbConnect.getUsername(uid)
+    #print(username)
+
+
+
+    return render_template('detail.html', messages=messages, channel=channel, uid=uid, tim=tim, uname=uname)
+
+
+
+
 
 
 
